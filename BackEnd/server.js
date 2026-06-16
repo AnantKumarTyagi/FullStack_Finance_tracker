@@ -9,12 +9,13 @@ const expenseRoutes = require("./routes/expenseRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const app = express();
-const allowedOrigin = process.env.CLIENT_URL || "http://localhost:5173";
+const rawClientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+const allowedOrigin = rawClientUrl.trim().replace(/\/$/, "");
 
 app.use(
   cors({
     origin: allowedOrigin,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true, 
     allowedHeaders: ["Content-Type", "Authorization"],
   })
