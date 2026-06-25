@@ -77,6 +77,9 @@ exports.getUserInfo = async (req, res) => {
 };
 
 exports.deleteAccount = async (req, res) => {
+  if (req.user.email === "david34@gmail.com") {
+        return res.status(403).json({ message: "Data deletion is disabled in Demo Mode." });
+    }
   try {
     const userId = req.user.id;
 

@@ -79,8 +79,12 @@ const fetchIncomeTransactions = async () => {
             setOpenDeleteAlert({ show: false, data: null });
             toast.success("Income deleted successfully!");
             fetchIncomeTransactions();
-        } catch (error) {
-            console.error("Error deleting income:", error);
+        }catch (error) {
+        if (error.response && error.response.status === 403) {
+        toast.error(error.response.data.message);
+        } else {
+        toast.error("Failed to delete transaction.");
+        }
         }
     };
 

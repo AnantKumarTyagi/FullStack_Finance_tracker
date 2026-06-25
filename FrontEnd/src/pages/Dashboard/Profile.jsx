@@ -61,9 +61,12 @@ const fetchUserProfile = async () => {
                 setClearAllTransactions(false);
                 toast.success("All transactions cleared successfully!");
             }
-        } catch (error) {
-            console.error("Error clearing all transactions:", error);
-            toast.error("Failed to clear transactions. Please try again.");
+        }catch (error) {
+        if (error.response && error.response.status === 403) {
+        toast.error(error.response.data.message);
+        } else {
+        toast.error("Failed to delete transaction.");
+        }
         }
     };
 
@@ -76,9 +79,11 @@ const fetchUserProfile = async () => {
                 navigate("/login");
             }
         } catch (error) {
-            console.error("Error deleting account:", error);
-            toast.error("Failed to delete account. Please try again.");
-            setDeleteAccount(false);
+        if (error.response && error.response.status === 403) {
+        toast.error(error.response.data.message);
+        } else {
+        toast.error("Failed to delete transaction.");
+        }
         }
     };
 

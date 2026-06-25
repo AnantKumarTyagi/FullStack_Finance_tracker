@@ -11,6 +11,7 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const [isDemoLoading, setIsDemoLoading] = useState(false)
 
     const { updateUser } = useContext(UserContext);
 
@@ -51,6 +52,32 @@ const LoginPage = () => {
         }
     }
 
+    const handleDemoLogin = async () => {
+        setIsDemoLoading(true);
+        setError("");
+        try {
+            const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+                email: "david34@gmail.com",
+                password: "123456"
+            });
+            const { token, user } = response.data;
+            if (token) {
+                localStorage.setItem("token", token);
+                updateUser(user);
+                navigate("/dashboard");
+            }
+        } catch (err) {
+            if (err.response && err.response.data) {
+                setError(err.response.data.message || "Demo login failed, please try again.");
+            } else {
+                setError("An unexpected error occurred, please try again later.");
+            }
+        } finally {
+            setIsDemoLoading(false);
+        }
+    };
+
+
     return (
         <AuthLayout>
             <div className="lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center">
@@ -81,7 +108,15 @@ const LoginPage = () => {
                     >
                         LOGIN
                     </button>
-
+                    
+                    <button
+                        type="button"
+                        onClick={handleDemoLogin}
+                        disabled={isDemoLoading}
+                        className="w-full text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 py-2.5 rounded-md mt-4 transition-all"
+                    >
+                        {isDemoLoading ? "LOADING DEMO..." : "ONE-CLICK DEMO"}
+                    </button>
                     <p className="text-[13px] text-slate-800 mt-3 text-center">
                         Don't have an account? {""}
                         <Link className="text-primary font-medium underline" to='/signup'>

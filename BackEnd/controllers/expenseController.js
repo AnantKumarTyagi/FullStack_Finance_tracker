@@ -42,6 +42,9 @@ exports.getAllExpense = async (req, res) => {
 };
 
 exports.deleteAllExpenses = async (req, res) => {
+  if (req.user.email === "david34@gmail.com") {
+        return res.status(403).json({ message: "Data deletion is disabled in Demo Mode." });
+    }
   try {
     const userId = req.user.id;
     await Expense.deleteMany({ userId });
@@ -54,6 +57,9 @@ exports.deleteAllExpenses = async (req, res) => {
 };
 
 exports.deleteExpenseWithID = async (req, res) => {
+  if (req.user.email === "david34@gmail.com") {
+        return res.status(403).json({ message: "Data deletion is disabled in Demo Mode." });
+    }
   try {
     await Expense.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Expense deleted successfully" });

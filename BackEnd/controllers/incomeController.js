@@ -42,6 +42,9 @@ exports.getAllIncome = async (req, res) => {
 };
 
 exports.deleteAllIncome = async (req, res) => {
+  if (req.user.email === "david34@gmail.com") {
+        return res.status(403).json({ message: "Data deletion is disabled in Demo Mode." });
+    }
   try {
     const userId = req.user.id;
     await Income.deleteMany({ userId });
@@ -57,6 +60,9 @@ exports.deleteAllIncome = async (req, res) => {
 };
 
 exports.deleteIncomeWithID = async (req, res) => {
+  if (req.user.email === "david34@gmail.com") {
+        return res.status(403).json({ message: "Data deletion is disabled in Demo Mode." });
+    }
   try {
     await Income.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Income deleted successfully" });
